@@ -35,6 +35,8 @@ def main(page: ft.Page):
     
     result =  ft.Text(value = '0', color= clr.WHITE, size=25)
     
+    def select(e):
+        ...
     
     #define calculator number will be on the right side
     display = ft.Row(
@@ -44,37 +46,9 @@ def main(page: ft.Page):
     ) 
     
     
-    def calculate(operator, value_at):
-        value_at = eval(value_at)
-        
-        if operator == '%':
-            value /= 100 
-        elif operator == '-/+':
-            value = -value
-            
-            return value
-        
     
-    def select(e):
-        value_at = result.value if result.value != '0' else ''
-        value = e.control.content.value 
-        
-        if value.isdigit():
-            value = value_at + value
-            
-        elif value == 'AC':
-            value = '0'
-        else:
-            if value_at and value_at[-1] in ('/','X','-','+',','):
-                value_at = value_at[:-1]
-            
-            value = value_at + value
-            
-            if value [-1] in ('=','%','+/-'):
-                value = calculate(operator=value[-1], value_at=value_at)
-
-        result.value =  value
-        result.update()
+        #result.value =  value
+        #result.update()
     #create botton
     btn = [ft.Container(
         content=ft.Text(value = btn['operator'], color=btn['fonte']),
