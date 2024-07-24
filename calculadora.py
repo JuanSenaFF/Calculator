@@ -11,7 +11,7 @@ bottons = [
     {'operator': '/', 'fonte': clr.WHITE, 'fundo': clr.ORANGE},
     {'operator': '7', 'fonte': clr.WHITE, 'fundo': clr.WHITE24},
     {'operator': '8', 'fonte': clr.WHITE, 'fundo': clr.WHITE24},
-    {'operator': '9', 'fundo': clr.WHITE, 'fonte': clr.WHITE24},
+    {'operator': '9', 'fonte': clr.WHITE, 'fundo': clr.WHITE24},
     {'operator': '*', 'fonte': clr.WHITE, 'fundo': clr.ORANGE},
     {'operator': '4', 'fonte': clr.WHITE, 'fundo': clr.WHITE24},
     {'operator': '5', 'fonte': clr.WHITE, 'fundo': clr.WHITE24},
