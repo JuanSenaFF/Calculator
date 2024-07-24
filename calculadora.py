@@ -1,15 +1,16 @@
 import flet as ft 
 from flet import colors as clr
+from decimal import Decimal
 
 bottons = [
     {'operator': 'AC', 'fonte':clr.BLACK, 'fundo':clr.BLUE_GREY_100},
-    {'operator': '+/-', 'fonte':clr.BLACK, 'fundo':clr.BLUE_GREY_100},
+    {'operator': '±', 'fonte':clr.BLACK, 'fundo':clr.BLUE_GREY_100},
     {'operator': '%', 'fonte':clr.BLACK, 'fundo':clr.BLUE_GREY_100},
-    {'operator': '÷', 'fonte':clr.WHITE, 'fundo':clr.ORANGE},
+    {'operator': '/', 'fonte':clr.WHITE, 'fundo':clr.ORANGE},
     {'operator': '7', 'fonte':clr.WHITE, 'fundo':clr.WHITE24},
     {'operator': '8', 'fonte':clr.WHITE, 'fundo':clr.WHITE24},
     {'operator': '9', 'fonte':clr.WHITE, 'fundo':clr.WHITE24},
-    {'operator': 'X', 'fonte':clr.WHITE, 'fundo':clr.ORANGE},
+    {'operator': '*', 'fonte':clr.WHITE, 'fundo':clr.ORANGE},
     {'operator': '4', 'fonte':clr.WHITE, 'fundo':clr.WHITE24},
     {'operator': '5', 'fonte':clr.WHITE, 'fundo':clr.WHITE24},
     {'operator': '6', 'fonte':clr.WHITE, 'fundo':clr.WHITE24},
@@ -19,7 +20,7 @@ bottons = [
     {'operator': '3', 'fonte':clr.WHITE, 'fundo':clr.WHITE24},
     {'operator': '+', 'fonte':clr.WHITE, 'fundo':clr.ORANGE},
     {'operator': '0', 'fonte':clr.WHITE, 'fundo':clr.WHITE24},
-    {'operator': ',', 'fonte':clr.WHITE, 'fundo':clr.WHITE24},
+    {'operator': '.', 'fonte':clr.WHITE, 'fundo':clr.WHITE24},
     {'operator': '=', 'fonte':clr.WHITE, 'fundo':clr.ORANGE},
 ]
 
@@ -35,8 +36,54 @@ def main(page: ft.Page):
     
     result =  ft.Text(value = '0', color= clr.WHITE, size=25)
     
+    def calculate(operator, value_at):
+        
+        try:    
+            value = eval(value_at)
+            if operator  == '%':
+                value /= 100
+            elif operator == '±':
+                value = -value
+        except:        
+            return 'Error'
+        
+        digits = min(abs(Decimal(value).as_tuple().exponent), 5)  
+        return format(value, f'.{digits}f') 
+        
+    
     def select(e):
-        ...
+        value_at = result.value if result.value not in ('0', 'Error') else ''
+        value = e.control.content.value
+        
+        if value.isdigit():
+            value = value_at + value 
+        elif value == 'AC':
+            value = '0'
+        else:
+            if value_at and value_at[-1] in ('/', '*', '-', '+', '.'):
+                value_at = value_at[:-1]
+                
+            value = value_at + value 
+            
+            if value[-1] in ('=', '%', '±'):
+                value = calculate(operator=value[-1], value_at=value_at)
+                
+        result.value = value
+        result.update()
+    
+    
+        
+    #create botton
+    btn = [ft.Container(
+        content=ft.Text(value=btn['operator'], color=btn['fonte']),
+        alignment=ft.alignment.center,
+        width=50,
+        height=50,
+        bgcolor= btn['fundo'],
+        border_radius=100,
+        on_click= select
+    )   for btn in bottons  ]
+    
     
     #define calculator number will be on the right side
     display = ft.Row(
@@ -44,21 +91,6 @@ def main(page: ft.Page):
         controls=[result], #row elements
         alignment=  'end'
     ) 
-    
-    
-    
-        #result.value =  value
-        #result.update()
-    #create botton
-    btn = [ft.Container(
-        content=ft.Text(value = btn['operator'], color=btn['fonte']),
-        width=50,
-        height=50,
-        bgcolor= btn['fundo'],
-        border_radius=100,
-        alignment=ft.alignment.center,
-        on_click= select
-    )   for btn in bottons  ]
     
     
     Keyboard =ft.Row(
@@ -71,7 +103,8 @@ def main(page: ft.Page):
     
     
 
-    page.add(display, Keyboard)
+    page.add(display)
+    page.add(Keyboard)
     
     
 
